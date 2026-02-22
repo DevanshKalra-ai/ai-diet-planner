@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Diet Planner | Smart Meal Plans with Macro Tracking</title>
+    <meta name="description" content="Generate personalized diet plans with AI. Get detailed macro breakdowns, charts, and meal schedules tailored to your goals.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+                    <path d="M7 2v20"/>
+                    <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/>
+                </svg>
+                <span>AI Diet Planner</span>
+            </a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Plan Your Perfect Diet <span class="gradient-text">with AI</span></h1>
+        <p>Get personalized meal plans with detailed macro breakdowns, nutrition charts, and smart recommendations — powered by Google Gemini.</p>
+    </section>
+
+    <!-- API Key -->
+    <section class="api-key-section">
+        <div class="api-key-card">
+            <div class="api-key-info">
+                <h3>Enter Your Gemini API Key</h3>
+                <p>Your key is stored locally and never sent to any server except Google's. <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Get a free key</a></p>
+            </div>
+            <div class="api-key-input-group">
+                <div class="input-wrapper">
+                    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key..." autocomplete="off">
+                    <button class="btn-icon" id="toggleKeyVisibility" aria-label="Toggle key visibility">
+                        <svg class="icon-eye" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg class="icon-eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </button>
+                </div>
+                <button class="btn btn-primary" id="saveApiKey">Save Key</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main App -->
+    <main class="app-container">
+
+        <!-- Form Panel -->
+        <div class="form-panel">
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Your Profile</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Diet Preferences</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Additional Info</span>
+                </div>
+            </div>
+
+            <form id="dietForm" autocomplete="off">
+
+                <!-- Step 1: Your Profile -->
+                <div class="form-step active" data-step="1">
+                    <h2>Your Profile</h2>
+                    <p class="step-desc">Tell us about yourself so we can personalize your plan.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" min="10" max="120" placeholder="e.g. 25" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" required>
+                                <option value="" disabled selected>Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" min="20" max="300" step="0.1" placeholder="e.g. 70" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height (cm)</label>
+                            <input type="number" id="height" min="100" max="250" step="0.1" placeholder="e.g. 175" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="activityLevel">Activity Level</label>
+                        <select id="activityLevel" required>
+                            <option value="" disabled selected>Select your activity level</option>
+                            <option value="sedentary">Sedentary (little or no exercise)</option>
+                            <option value="lightly active">Lightly Active (1-3 days/week)</option>
+                            <option value="moderately active">Moderately Active (3-5 days/week)</option>
+                            <option value="very active">Very Active (6-7 days/week)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <div></div>
+                        <button type="button" class="btn btn-primary btn-next" data-next="2">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Diet Preferences -->
+                <div class="form-step" data-step="2">
+                    <h2>Diet Preferences</h2>
+                    <p class="step-desc">Choose your dietary goals and restrictions.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="goal">Goal</label>
+                            <select id="goal" required>
+                                <option value="" disabled selected>Select your goal</option>
+                                <option value="lose weight">Lose Weight</option>
+                                <option value="maintain weight">Maintain Weight</option>
+                                <option value="gain muscle">Gain Muscle</option>
+                                <option value="bulk">Bulk</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dietaryPreference">Dietary Preference</label>
+                            <select id="dietaryPreference" required>
+                                <option value="" disabled selected>Select preference</option>
+                                <option value="no restriction">No Restriction</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                                <option value="keto">Keto</option>
+                                <option value="paleo">Paleo</option>
+                                <option value="mediterranean">Mediterranean</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mealsPerDay">Meals Per Day</label>
+                        <select id="mealsPerDay" required>
+                            <option value="3">3 meals</option>
+                            <option value="4" selected>4 meals</option>
+                            <option value="5">5 meals</option>
+                            <option value="6">6 meals</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="allergies">Allergies / Restrictions</label>
+                        <textarea id="allergies" rows="3" placeholder="e.g. lactose intolerant, nut allergy, no shellfish..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline btn-prev" data-prev="1">Back</button>
+                        <button type="button" class="btn btn-primary btn-next" data-next="3">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Additional Info -->
+                <div class="form-step" data-step="3">
+                    <h2>Additional Info</h2>
+                    <p class="step-desc">Optional details to fine-tune your plan.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="budget">Budget (optional)</label>
+                            <select id="budget">
+                                <option value="" selected>No preference</option>
+                                <option value="budget-friendly">Budget-Friendly</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="premium">Premium</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cookingSkill">Cooking Skill</label>
+                            <select id="cookingSkill">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate" selected>Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalNotes">Additional Notes</label>
+                        <textarea id="additionalNotes" rows="3" placeholder="e.g. prefer quick meals, meal prep friendly, high protein snacks..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline btn-prev" data-prev="2">Back</button>
+                        <button type="submit" class="btn btn-primary btn-generate" id="generateBtn">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                            Generate Diet Plan
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="preview-panel" id="previewPanel">
+            <div class="preview-placeholder" id="previewPlaceholder">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+                    <path d="M7 2v20"/>
+                    <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3"/>
+                </svg>
+                <h3>Your Diet Plan Will Appear Here</h3>
+                <p>Fill out the form and click "Generate Diet Plan" to get your personalized meal plan with macro breakdowns.</p>
+            </div>
+
+            <div class="preview-content" id="previewContent" style="display: none;">
+
+                <!-- Plan Header -->
+                <div class="plan-header">
+                    <h2 id="planName">Your Diet Plan</h2>
+                    <p id="planOverview"></p>
+                </div>
+
+                <!-- Macro Summary Cards -->
+                <div class="macro-cards">
+                    <div class="macro-card macro-calories">
+                        <span class="macro-label">Calories</span>
+                        <span class="macro-value" id="totalCalories">—</span>
+                        <span class="macro-unit">kcal</span>
+                    </div>
+                    <div class="macro-card macro-protein">
+                        <span class="macro-label">Protein</span>
+                        <span class="macro-value" id="totalProtein">—</span>
+                        <span class="macro-unit">g</span>
+                    </div>
+                    <div class="macro-card macro-carbs">
+                        <span class="macro-label">Carbs</span>
+                        <span class="macro-value" id="totalCarbs">—</span>
+                        <span class="macro-unit">g</span>
+                    </div>
+                    <div class="macro-card macro-fat">
+                        <span class="macro-label">Fat</span>
+                        <span class="macro-value" id="totalFat">—</span>
+                        <span class="macro-unit">g</span>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3>Daily Macro Split</h3>
+                        <canvas id="macroChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Calories Per Meal</h3>
+                        <canvas id="mealChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- View Selector -->
+                <div class="view-controls">
+                    <h3>Meal Plan</h3>
+                    <div class="view-selector">
+                        <button class="view-btn active" data-view="daily">Daily View</button>
+                        <button class="view-btn" data-view="weekly">Weekly Overview</button>
+                        <button class="view-btn" data-view="cards">Meal Cards</button>
+                    </div>
+                </div>
+
+                <!-- Meal Plan Views -->
+                <div class="meal-plan-views">
+                    <div class="meal-view active" id="dailyView"></div>
+                    <div class="meal-view" id="weeklyView"></div>
+                    <div class="meal-view" id="cardsView"></div>
+                </div>
+
+                <!-- Tips -->
+                <div class="tips-section" id="tipsSection" style="display: none;">
+                    <h3>Tips & Recommendations</h3>
+                    <ul id="tipsList"></ul>
+                </div>
+
+                <!-- Shopping List -->
+                <div class="shopping-section" id="shoppingSection" style="display: none;">
+                    <h3>Shopping List</h3>
+                    <ul id="shoppingList"></ul>
+                </div>
+
+                <!-- Download -->
+                <div class="download-section">
+                    <button class="btn btn-primary btn-download" id="downloadBtn">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Generating your personalized diet plan...</p>
+            <span class="loading-sub">This may take a few seconds</span>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 AI Diet Planner. Built with Gemini AI.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/gemini.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
