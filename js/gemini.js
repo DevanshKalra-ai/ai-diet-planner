@@ -26,6 +26,10 @@ USER PROFILE:
 - Cooking Skill: ${formData.cookingSkill}
 - Additional Notes: ${formData.additionalNotes || 'None'}
 
+IMPORTANT DIETARY RULE:
+- NEVER include beef or any beef-based products in the meal plan. This is mandatory.
+- Prefer Indian-friendly foods and ingredients where possible.
+
 IMPORTANT FORMATTING RULES:
 1. Respond ONLY with valid JSON — no markdown, no backticks, no explanation.
 2. All numeric values must be numbers, not strings.
