@@ -96,6 +96,9 @@ Make sure daily totals equal the sum of all meal totals. Be specific with food i
             if (response.status === 400 || response.status === 403) {
                 throw new Error('Invalid API key. Please check and try again.');
             }
+            if (response.status === 429) {
+                throw new Error('API rate limit exceeded. Please wait a minute and try again, or check your quota at ai.google.dev.');
+            }
             throw new Error(`API error: ${response.status} ${response.statusText}`);
         }
 
